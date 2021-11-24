@@ -260,6 +260,8 @@ public class WebcamExample extends LinearOpMode
              */
             //Mat threshold_img = input.clone();
             //Mat mask = new Mat(input.rows(), input.cols(), CvType.CV_8U, Scalar.all(0));
+
+//            USE LOWERlim 70, UPPERLIM 90 for green detection
             Imgproc.cvtColor(input, input_bgr,Imgproc.COLOR_RGBA2BGR); //EasyOpenCV return images in RGBA format
             Imgproc.cvtColor(input_bgr, input_hsv, Imgproc.COLOR_BGR2HSV); // We convert them to BGR since only BGR (or RGB) conversions to HSV exist
             Core.inRange(input_hsv,
