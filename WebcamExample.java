@@ -265,8 +265,8 @@ public class WebcamExample extends LinearOpMode
             Imgproc.cvtColor(input, input_bgr,Imgproc.COLOR_RGBA2BGR); //EasyOpenCV return images in RGBA format
             Imgproc.cvtColor(input_bgr, input_hsv, Imgproc.COLOR_BGR2HSV); // We convert them to BGR since only BGR (or RGB) conversions to HSV exist
             Core.inRange(input_hsv,
-                    new Scalar(lowerlim,50,50),
-                    new Scalar(upperlim,255,255),
+                    new Scalar(60,50,50),
+                    new Scalar(80,255,255),
                     mask);
 
             //Core.bitwise_and(input, mask, cropped);
@@ -296,7 +296,7 @@ public class WebcamExample extends LinearOpMode
                         new Point(
                                 (i + 1) * input.cols() * (1f / 3f),
                                 input.rows() * (3f / 4f)),
-                        new Scalar(255, 0, 0), 4);
+                        new Scalar(0, 0, 255), 4);
 
                 cropped = mask.submat(
                         new Range((int) (input.rows() / 4), (int) (input.rows() * (3f / 4f))),
