@@ -133,10 +133,10 @@ public class FieldCentricMecanum extends OpMode {
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);
         double sideways = x * Math.cos(d) + y * Math.sin(d);
-        frontLeftPower =  Range.clip(forward - sideways - rotation, -1.0, 1.0);
-        frontRightPower = Range.clip(forward + sideways + rotation, -0.95, 0.95);
-        backLeftPower =   Range.clip(forward + sideways - rotation, -0.95, 0.95);
-        backRightPower =  Range.clip(forward - sideways + rotation, -0.95, 0.95);
+        frontLeftPower =  Range.clip(forward - sideways - rotation, -0.9, 0.9);
+        frontRightPower = Range.clip(forward + sideways + rotation, -0.9, 0.9);
+        backLeftPower =   Range.clip(forward + sideways - rotation, -0.9, 0.9);
+        backRightPower =  Range.clip(forward - sideways + rotation, -0.9, 0.9);
 
         if (gamepad2.left_trigger == 1.0){
             spinner.setDirection(DcMotor.Direction.REVERSE);
