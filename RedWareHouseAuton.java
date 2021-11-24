@@ -36,20 +36,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
@@ -66,8 +65,8 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "blue_turNtable_auton")
-public class BlueTurntableAuton extends LinearOpMode {
+@Autonomous(name = "red_wearehouse_Auton")
+public class RedWareHouseAuton extends LinearOpMode {
 
     // Declare OpMode members.
     private DcMotor spinner = null;
@@ -100,12 +99,12 @@ public class BlueTurntableAuton extends LinearOpMode {
      */
     private VuforiaLocalizer vuforia;
 
+
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
     private TFObjectDetector tfod;
-
 
     @Override
     public void runOpMode() {
@@ -134,18 +133,20 @@ public class BlueTurntableAuton extends LinearOpMode {
         clamp = hardwareMap.get(Servo.class, "CLAMP");
 
         spinner.setDirection(DcMotor.Direction.FORWARD);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //initVuforia();
-        //initTfod();
+        initVuforia();
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB888, true);
+
+        initTfod();
 
         if (tfod != null) {
             tfod.activate();
@@ -165,23 +166,33 @@ public class BlueTurntableAuton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        //int duckPosition;
-        //duckPosition = duckBarcode();
-        //telemetry.addData("duckPosition", duckPosition);
+        int duckPosition;
+        duckPosition = duckBarcode();
+        telemetry.addData("duckPosition", duckPosition);
         telemetry.update();
 
-        sideways(12, 0.7);
-        rotateToAngle(-50, 0.8);
-        timedSpin(-0.75, 4);
-        rotateToAngle(49, 0.8);
-        forward(28, 0.8);
-        outTake(320,3);
-        //rotateToAngle(55, 0.8);
-        //forward(10, 0.8);
-        rotateToAngle(-87, 0.5);
-        //forward(-1, 0.3);
-        forward(30, 0.8);
-        rotateToAngle(0, 0.8);
+
+        //rotateToAngle(-35, 0.5);
+        //forward(25, 0.3);
+        //rotateToAngle(90, 0.5);
+        //forward(45, 0.6);
+    }
+    public void rotateToAngle(double targetAngle, double power) {
+        double angleDifference = offsetAngle(targetAngle);
+        while (Math.abs(angleDifference) > 0.5 && opModeIsActive()) {
+            double rotation = Range.clip(angleDifference * 0.03 * power, -1, 1);
+            telemetry.addData("angleDifference", angleDifference);
+            telemetry.addData("power", rotation);
+            telemetry.update();
+            backLeft.setPower(rotation);
+            backRight.setPower(-rotation);
+            frontLeft.setPower(rotation);
+            frontRight.setPower(-rotation);
+
+            angleDifference = offsetAngle(targetAngle);
+            idle();
+        }
+
     }
     public double offsetAngle(double targetAngle) {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -199,23 +210,6 @@ public class BlueTurntableAuton extends LinearOpMode {
         }
 
         return angleDifference;
-
-    }
-    public void rotateToAngle(double targetAngle, double power) {
-        double angleDifference = offsetAngle(targetAngle);
-        while (Math.abs(angleDifference) > 0.5 && opModeIsActive()) {
-            double rotation = Range.clip(angleDifference * 0.03 * power, -1, 1);
-            telemetry.addData("angleDifference", angleDifference);
-            telemetry.addData("power", rotation);
-            telemetry.update();
-            backLeft.setPower(rotation);
-            backRight.setPower(-rotation);
-            frontLeft.setPower(rotation);
-            frontRight.setPower(-rotation);
-
-            angleDifference = offsetAngle(targetAngle);
-            idle();
-        }
 
     }
     private boolean atTarget()
@@ -274,7 +268,7 @@ public class BlueTurntableAuton extends LinearOpMode {
     }
 
     private int inchesToTicks(double inches) {
-        return (int) (inches / (4 * Math.PI) * 1440);
+        return (int) (inches / (4 * Math.PI) * 1440/3);
     }
 
     public void cartesianDrive(double forward, double sideways, double rotate) {
@@ -301,20 +295,7 @@ public class BlueTurntableAuton extends LinearOpMode {
         }
         spinner.setPower(0);
     }
-    public void outTake(int pos, double runtime){
-        ElapsedTime armTime = new ElapsedTime();
-        armTime.reset();
-        while (armTime.seconds() < runtime) {
-            arm.setTargetPosition(pos);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(1);
-            starMotor.setPower(-0.18);
-        }
-        starMotor.setPower(0);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        arm.setPower(0);
-    }
-/*
+
     public int duckBarcode(){
         int duckbarcode = 0;
             while (duckbarcode == 0)
@@ -324,17 +305,21 @@ public class BlueTurntableAuton extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        telemetry.update();
+                        //telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        //telemetry.update();
 
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
                             if(recognition.getLabel() == "Duck")
                             {
-                                duckbarcode = 1;
+                                //duckbarcode = 1;
+                                double horizontalPosition = (recognition.getLeft() + recognition.getRight())/2.0;
+                                telemetry.addData("Avg Duck Pos: ", horizontalPosition);
+                                telemetry.update();
                             }
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.update();
+
+                            //telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            //telemetry.update();
                         }
                         // step through the list of recognitions and display boundary info.
                     }
@@ -347,8 +332,7 @@ public class BlueTurntableAuton extends LinearOpMode {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
-    /*
-    VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
@@ -357,12 +341,12 @@ public class BlueTurntableAuton extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }*/
+    }
 
     /**
      * Initialize the TensorFlow Object Detection engine.
      */
-    /*private void initTfod() {
+    private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -371,6 +355,6 @@ public class BlueTurntableAuton extends LinearOpMode {
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }*/
+    }
 
 }

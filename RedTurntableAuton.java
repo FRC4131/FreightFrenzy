@@ -33,15 +33,24 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import java.util.List;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -56,7 +65,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "red_turtable_auton")
+@Autonomous(name = "red_turNtable_auton")
 public class RedTurntableAuton extends LinearOpMode {
 
     // Declare OpMode members.
@@ -65,12 +74,41 @@ public class RedTurntableAuton extends LinearOpMode {
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
+    private DcMotor starMotor = null;
+    private DcMotor arm = null;
+    private DcMotor arm2 = null;
+    private Servo clamp = null;
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
     double startAngle;
+
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    private static final String[] LABELS = {
+            "Ball",
+            "Cube",
+            "Duck",
+            "Marker"
+    };
+    private static final String VUFORIA_KEY =
+            "AYARiS3/////AAABmYX7HlUeQEZ4lwV/YqVyX+4mirm35X2Rjl3vmRHtPxu4QcxIgNG7qzCxgvolucJdpwjVlaMrLWorwZM89pGOupCsKqEC0i9xFqPd93fhcoVF/SKAcORXdWoJ9MZjfHlUKVVO4d54A8oN7BxizDOXgN91Ys+cMt7cwGY2ArtiwGThv96Q/lelQdCaRcaPBRydciy5ytDAyqPN8MhAz5Etzk3+iG4WdqUEXgUzgh022udBREGHuRH1FwANXh8aL47AvvlVmjLwfYcxXwuDj94PrO60z6xzYQrMU1yZ5OJOOeFkz4Lqdp3fr8tA6cY3BEJMyrra0CRwsV3XN5iG0bHSXOWSGMCPXAkrSDp0CBPpio5/";
+
+    /**
+     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.
+     */
+    private VuforiaLocalizer vuforia;
+
+    /**
+     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
+     * Detection engine.
+     */
+    private TFObjectDetector tfod;
+
+
     @Override
     public void runOpMode() {
+
 
 //        leftBase = hardwareMap.get(Servo.class, "leftBase");
 //        rightBase = hardwareMap.get(Servo.class, "rightBase");
@@ -89,17 +127,36 @@ public class RedTurntableAuton extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "BL");
         backRight = hardwareMap.get(DcMotor.class, "BR");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
+        starMotor = hardwareMap.get(DcMotor.class, "SM");
+        arm = hardwareMap.get(DcMotor.class, "ARM");
+        arm2 = hardwareMap.get(DcMotor.class, "ARM2");
+        clamp = hardwareMap.get(Servo.class, "CLAMP");
 
         spinner.setDirection(DcMotor.Direction.FORWARD);
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //initVuforia();
+        //initTfod();
+
+        if (tfod != null) {
+            tfod.activate();
+
+            // The TensorFlow software will scale the input images from the camera to a lower resolution.
+            // This can result in lower detection accuracy at longer distances (> 55cm or 22").
+            // If your target is at distance greater than 50 cm (20") you can adjust the magnification value
+            // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
+            // should be set to the value of the images used to create the TensorFlow Object Detection model
+            // (typically 16/9).
+            tfod.setZoom(2.5, 16.0/9.0);
+        }
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -107,12 +164,28 @@ public class RedTurntableAuton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        //int duckPosition;
+        //duckPosition = duckBarcode();
+        //telemetry.addData("duckPosition", duckPosition);
+        telemetry.update();
+        //forward(-6,0.5);
+        sideways(12, 0.3);
+        rotateToAngle(-20, 0.5);
+        timedSpin(0.75, 4);
+        rotateToAngle(124, 0.8);
+        forward(24, 0.9);
+        outTake(320,3);
+        //rotateToAngle(55, 0.8);
+        //forward(10, 0.8);
+        rotateToAngle(-95, 0.5);
+        //forward(-1, 0.3);
+        forward(27, 0.8);
+        rotateToAngle(-180,0.8);
 
-        forward(13, 0.3);
-        timedSpin(0.8, 3);
-        sideways(5, 0.3);
-        rotateToAngle(35, 0.5);
-        forward(-30, 0.3);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+
     }
     public void rotateToAngle(double targetAngle, double power) {
         double angleDifference = offsetAngle(targetAngle);
@@ -168,7 +241,6 @@ public class RedTurntableAuton extends LinearOpMode {
 
         runToPosition(power);
     }
-
     public void forward(double inches, double power) {
         frontLeft.setTargetPosition(frontLeft.getCurrentPosition() + inchesToTicks(inches));
         frontRight.setTargetPosition(frontRight.getCurrentPosition() + inchesToTicks(inches));
@@ -205,7 +277,7 @@ public class RedTurntableAuton extends LinearOpMode {
     }
 
     private int inchesToTicks(double inches) {
-        return (int) (inches / (4 * Math.PI) * 1440/3);
+        return (int) (inches / (4 * Math.PI) * 1440);
     }
 
     public void cartesianDrive(double forward, double sideways, double rotate) {
@@ -232,5 +304,76 @@ public class RedTurntableAuton extends LinearOpMode {
         }
         spinner.setPower(0);
     }
+    public void outTake(int pos, double runtime){
+        ElapsedTime armTime = new ElapsedTime();
+        armTime.reset();
+        while (armTime.seconds() < runtime) {
+            arm.setTargetPosition(pos);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm.setPower(1);
+            starMotor.setPower(-0.18);
+        }
+        starMotor.setPower(0);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setPower(0);
+    }
+/*
+    public int duckBarcode(){
+        int duckbarcode = 0;
+            while (duckbarcode == 0)
+            {
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        telemetry.update();
+
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if(recognition.getLabel() == "Duck")
+                            {
+                                duckbarcode = 1;
+                            }
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.update();
+                        }
+                        // step through the list of recognitions and display boundary info.
+                    }
+                }
+            }
+        return duckbarcode;
+    }
+
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+    /*
+    VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }*/
+
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    /*private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.isModelTensorFlow2 = true;
+        tfodParameters.inputSize = 320;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+    }*/
 
 }

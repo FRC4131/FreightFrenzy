@@ -33,11 +33,10 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.vuforia.Vuforia;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Image;
+import com.vuforia.*;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -74,11 +73,14 @@ public class BlueWareHouseAuton extends LinearOpMode {
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
+    private DcMotor starMotor = null;
+    private DcMotor arm = null;
+    private DcMotor arm2 = null;
+    private Servo clamp = null;
     BNO055IMU imu;
     Orientation angles;
-    Acceleration gravity;
     double startAngle;
-
+/*
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
@@ -93,10 +95,11 @@ public class BlueWareHouseAuton extends LinearOpMode {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    private VuforiaLocalizer vuforia;
+ /*   private VuforiaLocalizer vuforia;
+
 
     /**
-     * {@link ##tfod} is the variable we will use to store our instance of the TensorFlow Object
+     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
     //private TFObjectDetector tfod;
@@ -122,6 +125,10 @@ public class BlueWareHouseAuton extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "BL");
         backRight = hardwareMap.get(DcMotor.class, "BR");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
+        starMotor = hardwareMap.get(DcMotor.class, "SM");
+        arm = hardwareMap.get(DcMotor.class, "ARM");
+        arm2 = hardwareMap.get(DcMotor.class, "ARM2");
+        clamp = hardwareMap.get(Servo.class, "CLAMP");
 
         spinner.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -134,14 +141,12 @@ public class BlueWareHouseAuton extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB888, true);
-        initVuforia();
-        this.vuforia.setFrameQueueCapacity(1);
+        //initVuforia();
+        //Vuforia.setFrameFormat(PIXEL_FORMAT.RGB888, true);
 
         //initTfod();
 
-/*        if (tfod != null) {
+        /*if (tfod != null) {
             tfod.activate();
 
             // The TensorFlow software will scale the input images from the camera to a lower resolution.
@@ -156,30 +161,22 @@ public class BlueWareHouseAuton extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+//        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//        startAngle = angles.firstAngle;
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        //int duckPosition;
+        int duckPosition;
         //duckPosition = duckBarcode();
         //telemetry.addData("duckPosition", duckPosition);
-        //telemetry.update();
-        VuforiaLocalizer.CloseableFrame frame = null;
-        Image myImage;
-
-        try {
-            frame = this.vuforia.getFrameQueue().take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (frame != null) {
-            myImage = frame.getImage(0);
-        }
+        telemetry.update();
 
 
-        //rotateToAngle(-35, 0.5);
-        //forward(25, 0.3);
-        //rotateToAngle(90, 0.5);
-        //forward(45, 0.6);
+        rotateToAngle(-35.0, 0.5);
+        forward(25, 0.3);
+        rotateToAngle(90, 0.5);
+        forward(45, 0.6);
     }
     public void rotateToAngle(double targetAngle, double power) {
         double angleDifference = offsetAngle(targetAngle);
@@ -188,10 +185,10 @@ public class BlueWareHouseAuton extends LinearOpMode {
             telemetry.addData("angleDifference", angleDifference);
             telemetry.addData("power", rotation);
             telemetry.update();
-            backLeft.setPower(rotation);
-            backRight.setPower(-rotation);
-            frontLeft.setPower(rotation);
-            frontRight.setPower(-rotation);
+            backLeft.setPower(-rotation);
+            backRight.setPower(rotation);
+            frontLeft.setPower(-rotation);
+            frontRight.setPower(rotation);
 
             angleDifference = offsetAngle(targetAngle);
             idle();
@@ -200,7 +197,6 @@ public class BlueWareHouseAuton extends LinearOpMode {
     }
     public double offsetAngle(double targetAngle) {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        gravity = imu.getGravity();
 
         double currentAngle = angles.firstAngle - startAngle;
 
@@ -237,10 +233,10 @@ public class BlueWareHouseAuton extends LinearOpMode {
     }
 
     public void forward(double inches, double power) {
-        frontLeft.setTargetPosition(frontLeft.getCurrentPosition() + inchesToTicks(inches));
-        frontRight.setTargetPosition(frontRight.getCurrentPosition() + inchesToTicks(inches));
-        backLeft.setTargetPosition(backLeft.getCurrentPosition() + inchesToTicks(inches));
-        backRight.setTargetPosition(backRight.getCurrentPosition() + inchesToTicks(inches));
+        frontLeft.setTargetPosition(frontLeft.getCurrentPosition() - inchesToTicks(inches));
+        frontRight.setTargetPosition(frontRight.getCurrentPosition() - inchesToTicks(inches));
+        backLeft.setTargetPosition(backLeft.getCurrentPosition() - inchesToTicks(inches));
+        backRight.setTargetPosition(backRight.getCurrentPosition() - inchesToTicks(inches));
 
         runToPosition(power);
     }
@@ -299,8 +295,8 @@ public class BlueWareHouseAuton extends LinearOpMode {
         }
         spinner.setPower(0);
     }
-/*
-    public int duckBarcode(){
+
+    /*public int duckBarcode(){
         int duckbarcode = 0;
             while (duckbarcode == 0)
             {
@@ -331,15 +327,14 @@ public class BlueWareHouseAuton extends LinearOpMode {
             }
         return duckbarcode;
     }
-*/
+
     private void initVuforia() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-           */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+         */
+        /*VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -349,8 +344,8 @@ public class BlueWareHouseAuton extends LinearOpMode {
 
     /**
      * Initialize the TensorFlow Object Detection engine.
-
-    private void initTfod() {
+     */
+    /*private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -359,6 +354,7 @@ public class BlueWareHouseAuton extends LinearOpMode {
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }
-*/
+    }*/
+
+
 }
