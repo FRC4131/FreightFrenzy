@@ -239,7 +239,7 @@ public class WebcamExample extends LinearOpMode
         Mat cropped = new Mat();
         Scalar sumValue = new Scalar(0);
         float totalPixs = 0.0f;
-        float[] sumValNorm = new float[3];
+        float[] sumValNorm = new float[5];
         int lowerlim = 0;
         int upperlim = 0;
         public void setColorLimits(int inputLowerLim, int inputUpperLim)
@@ -284,23 +284,23 @@ public class WebcamExample extends LinearOpMode
             //Core.multiply(threshold_img, new Scalar(255), input);
             //input.copyTo(dst, threshold_img);
 
-            for (int i=0; i<3; i++) {
+            for (int i=0; i<5; i++) {
                 Imgproc.rectangle(
                         input,
                         new Point(
                                 //0,0),
-                                i * input.cols() * (1f / 3f),
+                                i * input.cols() * (1f / 5f),
                                 //input.cols()/4,
                                 input.rows() / 4),
                         //input.rows()/4),
                         new Point(
-                                (i + 1) * input.cols() * (1f / 3f),
+                                (i + 1) * input.cols() * (1f / 5f),
                                 input.rows() * (3f / 4f)),
                         new Scalar(0, 0, 255), 4);
 
                 cropped = mask.submat(
                         new Range((int) (input.rows() / 4), (int) (input.rows() * (3f / 4f))),
-                        new Range((int)(i * input.cols() * (1f / 3f)), (int) ((i+1)*input.cols() * (1f / 3f)))
+                        new Range((int)(i * input.cols() * (1f / 5f)), (int) ((i+1)*input.cols() * (1f / 5f)))
                 );
 
                 /**
@@ -321,7 +321,7 @@ public class WebcamExample extends LinearOpMode
         public int FindObjectPosition()
         {
             int ind = 0;
-            for(int i = 1; i < 3; i++)
+            for(int i = 1; i < 5; i++)
             {
                 if(sumValNorm[i] > sumValNorm[ind])
                 {

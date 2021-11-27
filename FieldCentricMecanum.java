@@ -72,7 +72,9 @@ public class FieldCentricMecanum extends OpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         spinner.setDirection(DcMotor.Direction.FORWARD);
+        arm.setDirection(DcMotor.Direction.REVERSE);
         clamp.setDirection(Servo.Direction.REVERSE);
+
 
         //Setting the DcMotors to run using the encoders engages the DcMotor's built-in
         // PID controller when setting motor angular speeds
