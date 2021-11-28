@@ -135,10 +135,10 @@ public class FieldCentricMecanum extends OpMode {
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);
         double sideways = x * Math.cos(d) + y * Math.sin(d);
-        frontLeftPower =  Range.clip(forward - sideways - rotation, -0.9, 0.9);
-        frontRightPower = Range.clip(forward + sideways + rotation, -0.9, 0.9);
-        backLeftPower =   Range.clip(forward + sideways - rotation, -0.9, 0.9);
-        backRightPower =  Range.clip(forward - sideways + rotation, -0.9, 0.9);
+        frontLeftPower =  Range.clip(forward - sideways - rotation, -1.0, 1.0);
+        frontRightPower = Range.clip(forward + sideways + rotation, -1.0, 1.0);
+        backLeftPower =   Range.clip(forward + sideways - rotation, -1.0, 1.0);
+        backRightPower =  Range.clip(forward - sideways + rotation, -1.0, 1.0);
 
         if (gamepad2.left_trigger == 1.0){
             spinner.setDirection(DcMotor.Direction.REVERSE);
@@ -154,7 +154,9 @@ public class FieldCentricMecanum extends OpMode {
         } else {
             starMotor.setPower(0);
         }
-
+        if(gamepad2.left_stick_button){ //push really hard on the left stick
+            starAngle(240);
+        }
         if(Math.abs(gamepad2.left_stick_y) > 0.05){
             arm2.setPower(-0.7 * gamepad2.left_stick_y);
         } else {

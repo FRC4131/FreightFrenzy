@@ -65,7 +65,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "blue_wearehouse_Auton")
-public class BlueWareHouseAuton extends LinearOpMode {
+public class BlueWareHouseAuton extends LinearOpMode{
 
     // Declare OpMode members.
     private DcMotor spinner = null;

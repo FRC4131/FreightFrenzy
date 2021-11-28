@@ -51,7 +51,6 @@ import java.util.List;
 public class WebcamExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
-
     @Override
     public void runOpMode()
     {
@@ -138,7 +137,6 @@ public class WebcamExample extends LinearOpMode
                  */
             }
         });
-
         telemetry.addLine("Waiting for start");
         telemetry.update();
 
@@ -146,7 +144,6 @@ public class WebcamExample extends LinearOpMode
          * Wait for the user to press start on the Driver Station
          */
         waitForStart();
-
         while (opModeIsActive())
         {
             /*
