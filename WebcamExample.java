@@ -75,24 +75,25 @@ public class WebcamExample extends LinearOpMode
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        BufferedReader reader = null;
-        String line = null;
-        try {
-            reader = new BufferedReader(new FileReader("/sdcard/tmp/colorlims.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            assert reader != null;
-            line = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<String> args = Arrays.asList(line.split("\\s+"));
+//        BufferedReader reader = null;
+//        String line = null;
+//        try {
+//            reader = new BufferedReader(new FileReader("/sdcard/tmp/colorlims.txt"));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            assert reader != null;
+//            line = reader.readLine();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        List<String> args = Arrays.asList(line.split("\\s+"));
 
         SamplePipeline OurProcessingPipeline = new SamplePipeline();
-        OurProcessingPipeline.setColorLimits(Integer.parseInt(args.get(0)), Integer.parseInt(args.get(1)));
+        //OurProcessingPipeline.setColorLimits(Integer.parseInt(args.get(0)), Integer.parseInt(args.get(1)));
         webcam.setPipeline(OurProcessingPipeline);
 
         /*

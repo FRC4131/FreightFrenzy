@@ -95,28 +95,6 @@ public class BlueTurntableAuton extends LinearOpMode {
     OpenCvWebcam webcam;
     double startAngle;
 
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
-    private static final String[] LABELS = {
-            "Ball",
-            "Cube",
-            "Duck",
-            "Marker"
-    };
-    private static final String VUFORIA_KEY =
-            "AYARiS3/////AAABmYX7HlUeQEZ4lwV/YqVyX+4mirm35X2Rjl3vmRHtPxu4QcxIgNG7qzCxgvolucJdpwjVlaMrLWorwZM89pGOupCsKqEC0i9xFqPd93fhcoVF/SKAcORXdWoJ9MZjfHlUKVVO4d54A8oN7BxizDOXgN91Ys+cMt7cwGY2ArtiwGThv96Q/lelQdCaRcaPBRydciy5ytDAyqPN8MhAz5Etzk3+iG4WdqUEXgUzgh022udBREGHuRH1FwANXh8aL47AvvlVmjLwfYcxXwuDj94PrO60z6xzYQrMU1yZ5OJOOeFkz4Lqdp3fr8tA6cY3BEJMyrra0CRwsV3XN5iG0bHSXOWSGMCPXAkrSDp0CBPpio5/";
-
-    /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
-     */
-    private VuforiaLocalizer vuforia;
-
-    /**
-     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
-     * Detection engine.
-     */
-    private TFObjectDetector tfod;
-
 
     @Override
     public void runOpMode() {
@@ -196,20 +174,6 @@ public class BlueTurntableAuton extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //initVuforia();
-        //initTfod();
-
-        if (tfod != null) {
-            tfod.activate();
-
-            // The TensorFlow software will scale the input images from the camera to a lower resolution.
-            // This can result in lower detection accuracy at longer distances (> 55cm or 22").
-            // If your target is at distance greater than 50 cm (20") you can adjust the magnification value
-            // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
-            // should be set to the value of the images used to create the TensorFlow Object Detection model
-            // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0);
-        }
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -368,64 +332,7 @@ public class BlueTurntableAuton extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setPower(0);
     }
-/*
-    public int duckBarcode(){
-        int duckbarcode = 0;
-            while (duckbarcode == 0)
-            {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        telemetry.update();
 
-                        int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if(recognition.getLabel() == "Duck")
-                            {
-                                duckbarcode = 1;
-                            }
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.update();
-                        }
-                        // step through the list of recognitions and display boundary info.
-                    }
-                }
-            }
-        return duckbarcode;
-    }
-
-    private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-    /*
-    VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }*/
-
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
-    /*private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
-        tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 320;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }*/
 
     class SamplePipeline extends OpenCvPipeline
     {
