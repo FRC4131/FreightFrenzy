@@ -33,6 +33,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -162,10 +163,10 @@ public class RedTurntableAuton extends LinearOpMode {
         clamp = hardwareMap.get(Servo.class, "CLAMP");
 
         spinner.setDirection(DcMotor.Direction.FORWARD);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
         arm.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -181,17 +182,25 @@ public class RedTurntableAuton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        //int duckPosition;
-        //duckPosition = duckBarcode();
-        //telemetry.addData("duckPosition", duckPosition);
+        webcam.stopStreaming();
+        int objectPosition = OurProcessingPipeline.FindObjectPosition();
+        int armPosition;
+
         telemetry.update();
+        if (objectPosition == 0){
+            armPosition = 320;
+        } else if (objectPosition == 1){
+            armPosition = 560;
+        } else {
+            armPosition = 830;
+        }
         //forward(-6,0.5);
         sideways(12, 0.3);
         rotateToAngle(-20, 0.5);
         timedSpin(0.75, 4);
         rotateToAngle(124, 0.8);
         forward(24, 0.9);
-        outTake(320,3);
+        outTake(armPosition,3);
         //rotateToAngle(55, 0.8);
         //forward(10, 0.8);
         rotateToAngle(-95, 0.5);
@@ -353,7 +362,7 @@ public class RedTurntableAuton extends LinearOpMode {
         Mat cropped = new Mat();
         Scalar sumValue = new Scalar(0);
         float totalPixs = 0.0f;
-        float[] sumValNorm = new float[5];
+        float[] sumValNorm = new float[3];
         int lowerlim = 0;
         int upperlim = 0;
         public void setColorLimits(int inputLowerLim, int inputUpperLim)
@@ -398,23 +407,23 @@ public class RedTurntableAuton extends LinearOpMode {
             //Core.multiply(threshold_img, new Scalar(255), input);
             //input.copyTo(dst, threshold_img);
 
-            for (int i=0; i<5; i++) {
+            for (int i=0; i<3; i++) {
                 Imgproc.rectangle(
                         input,
                         new Point(
                                 //0,0),
-                                i * input.cols() * (1f / 5f),
+                                (i + 1) * input.cols() * (1f / 5f),
                                 //input.cols()/4,
                                 input.rows() / 4),
                         //input.rows()/4),
                         new Point(
-                                (i + 1) * input.cols() * (1f / 5f),
+                                (i + 2) * input.cols() * (1f / 5f),
                                 input.rows() * (3f / 4f)),
                         new Scalar(0, 0, 255), 4);
 
                 cropped = mask.submat(
                         new org.opencv.core.Range((int) (input.rows() / 4), (int) (input.rows() * (3f / 4f))),
-                        new org.opencv.core.Range((int)(i * input.cols() * (1f / 5f)), (int) ((i+1)*input.cols() * (1f / 5f)))
+                        new org.opencv.core.Range((int)((i+1) * input.cols() * (1f / 5f)), (int)((i+2)*input.cols() * (1f / 5f)))
                 );
 
                 /**
@@ -435,7 +444,7 @@ public class RedTurntableAuton extends LinearOpMode {
         public int FindObjectPosition()
         {
             int ind = 0;
-            for(int i = 1; i < 5; i++)
+            for(int i = 1; i < 3; i++)
             {
                 if(sumValNorm[i] > sumValNorm[ind])
                 {

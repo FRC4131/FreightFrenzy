@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -67,10 +68,10 @@ public class FieldCentricMecanum extends OpMode {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
         spinner.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.REVERSE);
         clamp.setDirection(Servo.Direction.REVERSE);
@@ -135,10 +136,10 @@ public class FieldCentricMecanum extends OpMode {
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);
         double sideways = x * Math.cos(d) + y * Math.sin(d);
-        frontLeftPower =  Range.clip(forward - sideways - rotation, -1.0, 1.0);
-        frontRightPower = Range.clip(forward + sideways + rotation, -1.0, 1.0);
-        backLeftPower =   Range.clip(forward + sideways - rotation, -1.0, 1.0);
-        backRightPower =  Range.clip(forward - sideways + rotation, -1.0, 1.0);
+        frontLeftPower =  Range.clip(forward - sideways - rotation, -0.7, 0.7 );
+        frontRightPower = Range.clip(forward + sideways + rotation, -0.7, 0.7);
+        backLeftPower =   Range.clip(forward + sideways - rotation, -0.7, 0.7);
+        backRightPower =  Range.clip(forward - sideways + rotation, -0.7, 0.7);
 
         if (gamepad2.left_trigger == 1.0){
             spinner.setDirection(DcMotor.Direction.REVERSE);
