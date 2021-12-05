@@ -15,6 +15,7 @@ public class FileCommandParser implements CommandParser{
     Robot robot;
     private BufferedReader reader;
     Telemetry telemetry;
+    int tierPosition = 0;
 
     public FileCommandParser(Robot inputRobot, String inputFileName, Telemetry inputTelemetry) throws FileNotFoundException {
         this.robot = inputRobot;
@@ -54,7 +55,7 @@ public class FileCommandParser implements CommandParser{
                         Double.parseDouble(args.get(2)));
                 break;
             case "MOVEARM" :
-                this.robot.moveArmPosition(Integer.parseInt(args.get(1)));
+                this.robot.moveArmPosition(this.tierPosition);
                 break;
             case "MOVEARMSPINNER":
                 this.robot.turnArmSpinnerTimed(
@@ -64,7 +65,7 @@ public class FileCommandParser implements CommandParser{
                 );
                 break;
             case "SCANBARCODE":
-                this.robot.ScanBarCode();
+                this.tierPosition = this.robot.ScanBarCode();
                 break;
             default:
                 this.telemetry.addData("Command Not Recognized: ", args.get(0));
