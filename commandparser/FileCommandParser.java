@@ -38,7 +38,7 @@ public class FileCommandParser implements CommandParser{
                         Double.parseDouble(args.get(2)),
                         Integer.parseInt(args.get(3)));
                 break;
-            case "TURN" :
+            case "TURNANGLE" :
                 this.robot.turnAngleDegrees(
                         Double.parseDouble(args.get(1)),
                         Double.parseDouble(args.get(2)));
@@ -52,6 +52,19 @@ public class FileCommandParser implements CommandParser{
                 this.robot.moveSidewaysInches(
                         Double.parseDouble(args.get(1)),
                         Double.parseDouble(args.get(2)));
+                break;
+            case "MOVEARM" :
+                this.robot.moveArmPosition(Integer.parseInt(args.get(1)));
+                break;
+            case "MOVEARMSPINNER":
+                this.robot.turnArmSpinnerTimed(
+                        Double.parseDouble(args.get(1)),
+                        Integer.parseInt(args.get(2)),
+                        Double.parseDouble(args.get(3))
+                );
+                break;
+            case "SCANBARCODE":
+                this.robot.ScanBarCode();
                 break;
             default:
                 this.telemetry.addData("Command Not Recognized: ", args.get(0));

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 
 import java.io.IOException;
 
-@Autonomous(name="AutonTestScript", group="")
+@Autonomous(name="AutonBlueTurnTable", group="")
 //@Disabled
 
 public class AutonBlueTurnTable extends LinearOpMode {
@@ -27,17 +27,17 @@ public class AutonBlueTurnTable extends LinearOpMode {
             CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
 
             waitForStart();
-/*
+
             while(myCommandParser.update())
             {
-                sleep(1000);
+//                sleep(1000);
             }
-            */
-            //sleep(1000);
-        myRobot.moveArmPosition(2);
-        myRobot.turnArmSpinnerTimed(5, 1, 0.18);
 
-        while (opModeIsActive()) {
+            //sleep(1000);
+//        myRobot.moveArmPosition(2);
+//        myRobot.turnArmSpinnerTimed(5, 1, 0.18);
+
+//        while (opModeIsActive()) {
 
                 //myRobot.turnSpinnerTimed(3, 0.8, SpinnerDirection.FORWARD.getVal());
             //myRobot.moveStraightInches(-6, 0.1);
@@ -45,7 +45,7 @@ public class AutonBlueTurnTable extends LinearOpMode {
             //myRobot.turnAngleDegrees(-45,0.3);
 
             //sleep(1000);
-            }
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();

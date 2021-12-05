@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.robot.ArmBot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-@Autonomous(name="AutonTestScript", group="")
+@Autonomous(name="AutonBlueWarehouse", group="")
 //@Disabled
 
 public class AutonBlueWarehouse extends LinearOpMode {
