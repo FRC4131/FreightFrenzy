@@ -17,21 +17,21 @@ public class AutonBlueTurnTable extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        try {
+//        try {
             //Robot myRobot = new BareBonesBot(telemetry, hardwareMap);
             //Robot myRobot = new SoftwareBot(telemetry, hardwareMap);
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
 
 
-            String inputFileName = "/sdcard/tmp/RedTurnTable.txt";
-            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
+//            String inputFileName = "/sdcard/tmp/RedTurnTable.txt";
+//            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
 
             waitForStart();
 
-            while(myCommandParser.update())
-            {
-//                sleep(1000);
-            }
+//            while(myCommandParser.update())
+//            {
+////                sleep(1000);
+//            }
 
             //sleep(1000);
 //        myRobot.moveArmPosition(2);
@@ -40,16 +40,16 @@ public class AutonBlueTurnTable extends LinearOpMode {
 //        while (opModeIsActive()) {
 
                 //myRobot.turnSpinnerTimed(3, 0.8, SpinnerDirection.FORWARD.getVal());
-            //myRobot.moveStraightInches(-6, 0.1);
+            myRobot.moveStraightInches(6, 0.1);
             //myRobot.moveSidewaysInches(6,0.3);
             //myRobot.turnAngleDegrees(-45,0.3);
 
             //sleep(1000);
 //            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
 

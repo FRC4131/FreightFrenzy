@@ -81,10 +81,10 @@ public class ArmBot implements Robot{
 
         //These directions essentially define which direction is the 'front' of the robot
         //(and which direction is 'forward')
-        this.leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        this.rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        this.leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-        this.rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        this.rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        this.leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        this.rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
         //Instantiate and return a new Mecanum drivetrain
         return new MecanumDriveTrain(
