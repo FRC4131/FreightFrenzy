@@ -51,20 +51,7 @@ public class AutonBlueTurnTable extends LinearOpMode {
             myRobot.moveStraightInches(55, 1.0);
             myRobot.turnAngleDegrees(90, movePower);
 
-            //sleep(1000);
-//        myRobot.moveArmPosition(2);
-//        myRobot.turnArmSpinnerTimed(5, 1, 0.18);
-
 //        while (opModeIsActive()) {
-//            telemetry.addData("Barcode: ", barCodeTier);
-//            telemetry.update();
-
-                //myRobot.turnSpinnerTimed(3, 0.8, SpinnerDirection.FORWARD.getVal());
-            //myRobot.moveStraightInches(6, 0.1);
-            //myRobot.moveSidewaysInches(6,0.3);
-            //myRobot.turnAngleDegrees(-45,0.3);
-
-            //sleep(1000);
 //            }
 
 //        } catch (IOException e) {
