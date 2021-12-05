@@ -32,7 +32,7 @@ public class FileCommandParser implements CommandParser{
                 this.telemetry.addData("Skipped Command: ", args.get(0));
                 this.telemetry.update();
                 break;
-            case "TIMEDSPIN" :
+            case "TABLESPIN" :
                 this.robot.turnSpinnerTimed(
                         Double.parseDouble(args.get(1)),
                         Double.parseDouble(args.get(2)),

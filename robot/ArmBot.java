@@ -86,6 +86,11 @@ public class ArmBot implements Robot{
         this.leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
         this.rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        this.leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //Instantiate and return a new Mecanum drivetrain
         return new MecanumDriveTrain(
                 this.leftFrontMotor,

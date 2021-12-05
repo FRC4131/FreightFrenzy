@@ -53,18 +53,18 @@ class BarCodeDetectPipeline extends OpenCvPipeline
                     input,
                     new Point(
                             //0,0),
-                            i * input.cols() * (1f / 5f),
+                            (i+1) * input.cols() * (1f / 5f),
                             //input.cols()/4,
                             input.rows() / 4),
                     //input.rows()/4),
                     new Point(
-                            (i + 1) * input.cols() * (1f / 5f),
+                            (i + 2) * input.cols() * (1f / 5f),
                             input.rows() * (3f / 4f)),
                     new Scalar(0, 0, 255), 4);
 
             cropped = mask.submat(
                     new org.opencv.core.Range((int) (input.rows() / 4), (int) (input.rows() * (3f / 4f))),
-                    new org.opencv.core.Range((int)(i * input.cols() * (1f / 5f)), (int) ((i+1)*input.cols() * (1f / 5f)))
+                    new org.opencv.core.Range((int)((i+1) * input.cols() * (1f / 5f)), (int) ((i+2)*input.cols() * (1f / 5f)))
             );
 
             //Sum all the color thresholded pixels to detect the color of interest
