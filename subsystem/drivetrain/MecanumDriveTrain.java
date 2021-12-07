@@ -73,7 +73,7 @@ public class MecanumDriveTrain implements DriveTrain
             wheelTicks.add(i, ticks);
         }
 
-        this.setMotorTicksTimed(wheelTicks, power);
+        this.setMotorTicks(wheelTicks, power);
     }
 
     //The kinematic model describes the Mecanum wheel angular velocities in terms of the robot velocities, but
@@ -91,7 +91,7 @@ public class MecanumDriveTrain implements DriveTrain
         return wheelOmega;
     }
 
-    private void setMotorTicksTimed(Vector<Integer> ticks, double power){
+    private void setMotorTicks(Vector<Integer> ticks, double power){
         //Setting the DcMotors to run using the encoders engages the DcMotor's built-in
         // PID controller when setting motor angular speeds (note: the default PID values
         // may be perform poorly if the robot frame is very heavy)
