@@ -17,26 +17,44 @@ public class AutonBlueWarehouse extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        try {
+//        try {
             //Robot myRobot = new BareBonesBot(telemetry, hardwareMap);
             //Robot myRobot = new SoftwareBot(telemetry, hardwareMap);
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
 
 
-            String inputFileName = "/sdcard/tmp/BlueWarehouse.txt";
-            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
+//            String inputFileName = "/sdcard/tmp/BlueWarehouse.txt";
+//            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
 
             waitForStart();
 
-            while(myCommandParser.update()) {}
+//            while(myCommandParser.update()) {}
+//   SCANBARCODE
+//STRAIGHT 2 0.4
+//SIDEWAYS -18 0.4
+//STRAIGHT 15 0.4
+//MOVEARM
+//MOVEARMSPINNER 2 1 0.3
+//TURNANGLE 90 0.4
+//STRAIGHT 54 0.8
+//TURNANGLE -90 0.4
+//STRAIGHT 6 0.4
+
+
+
+
+
+
+
+
 
 //        while (opModeIsActive()) {
             //sleep(1000);
 //            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
 
