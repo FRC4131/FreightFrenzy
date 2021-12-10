@@ -44,8 +44,8 @@ public class AutonBlueTurnTable extends LinearOpMode {
         myRobot.turnSpinnerTimed(3, 0.8, -1);
         myRobot.moveSidewaysInches(58, movePower);
         myRobot.turnAngleDegrees(-100, movePower);
-        myRobot.moveSidewaysInches(-43, movePower);
         myRobot.moveArmPosition(barCodeTier);
+        myRobot.moveSidewaysInches(-43, movePower);
         myRobot.turnArmSpinnerTimed(2,1, 0.36);
         myRobot.moveSidewaysInches(-25, movePower);
         myRobot.moveStraightInches(26, 0.4);
