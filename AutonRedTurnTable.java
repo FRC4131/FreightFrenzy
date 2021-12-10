@@ -47,7 +47,7 @@ public class AutonRedTurnTable extends LinearOpMode {
             myRobot.moveStraightInches(55, 1.0);
             myRobot.turnAngleDegrees(90, movePower);
 
-
+            //robot lined up on far edge away from turn table
         //    while(myCommandParser.update()) {}
 
 //        while (opModeIsActive()) {
