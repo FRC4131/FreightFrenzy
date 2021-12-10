@@ -17,21 +17,15 @@ public class AutonRedWarehouse extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-//        try {
             //Robot myRobot = new BareBonesBot(telemetry, hardwareMap);
             //Robot myRobot = new SoftwareBot(telemetry, hardwareMap);
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
-
-
-//            String inputFileName = "/sdcard/tmp/RedWarehouse.txt";
-//            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
 
             waitForStart();
 
             int barCodeTier = myRobot.ScanBarCode();
 
             double movePower = 0.4;
-
             myRobot.moveStraightInches(2, movePower);
             myRobot.moveSidewaysInches(18, movePower);
             myRobot.moveStraightInches(16, movePower);
@@ -41,18 +35,6 @@ public class AutonRedWarehouse extends LinearOpMode {
             myRobot.turnAngleDegrees(-90, movePower);
             myRobot.moveStraightInches(60, 0.8);
             myRobot.turnAngleDegrees(90, movePower);
-
-
-
-//            while(myCommandParser.update()) {}
-
-//        while (opModeIsActive()) {
-            //sleep(1000);
-//            }
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 }
 

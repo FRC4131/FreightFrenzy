@@ -17,21 +17,15 @@ public class AutonRedTurnTable extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-      //  try {
             //Robot myRobot = new BareBonesBot(telemetry, hardwareMap);
             //Robot myRobot = new SoftwareBot(telemetry, hardwareMap);
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
-
-
-//           String inputFileName = "/sdcard/tmp/RedTurnTable.txt";
-//            CommandParser myCommandParser = new FileCommandParser(myRobot, inputFileName, telemetry);
 
             waitForStart();
 
             int barCodeTier = myRobot.ScanBarCode();
 
             double movePower = 0.4;
-
             myRobot.moveStraightInches(4, movePower);
             myRobot.turnAngleDegrees(180, movePower);
             myRobot.moveSidewaysInches(-29, movePower);
@@ -46,6 +40,7 @@ public class AutonRedTurnTable extends LinearOpMode {
             myRobot.turnAngleDegrees(90, movePower);
             myRobot.moveStraightInches(55, 1.0);
             myRobot.turnAngleDegrees(90, movePower);
+<<<<<<< HEAD
 
             //robot lined up on far edge away from turn table
         //    while(myCommandParser.update()) {}
@@ -57,6 +52,8 @@ public class AutonRedTurnTable extends LinearOpMode {
        // } catch (IOException e) {
          //  e.printStackTrace();
        // }
+=======
+>>>>>>> 368477ee3a79073442fd289ed68416e6cfd32d48
     }
 }
 
