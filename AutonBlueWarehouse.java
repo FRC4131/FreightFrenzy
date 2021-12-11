@@ -22,13 +22,12 @@ public class AutonBlueWarehouse extends LinearOpMode {
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
 
             waitForStart();
-<<<<<<< HEAD
             int barCodeTier = myRobot.ScanBarCode();
             myRobot.moveStraightInches(2, 0.4);
             myRobot.moveSidewaysInches(-18, 0.4);
-            myRobot.moveStraightInches(16, 0.4);
             myRobot.moveArmPosition(barCodeTier);
-            myRobot.turnArmSpinnerTimed(2, 1, 0.3);
+            myRobot.moveStraightInches(15, 0.4);
+            myRobot.turnArmSpinnerTimed(2, 1, 0.5);
             myRobot.moveStraightInches(-5, 0.4);
             myRobot.turnAngleDegrees(90, 0.4);
             myRobot.moveStraightInches(54, 0.8);
@@ -62,21 +61,7 @@ public class AutonBlueWarehouse extends LinearOpMode {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-=======
 
-            int barCodeTier = myRobot.ScanBarCode();
-
-            double movePower = 0.4;
-            myRobot.moveStraightInches(2, movePower);
-            myRobot.moveSidewaysInches(-18, movePower);
-            myRobot.moveStraightInches(15, movePower);
-            myRobot.moveArmPosition(barCodeTier);
-            myRobot.turnArmSpinnerTimed(2,1, 0.3);
-            myRobot.turnAngleDegrees(90, movePower);
-            myRobot.moveStraightInches(54, movePower);
-            myRobot.turnAngleDegrees(-90, movePower);
-            myRobot.moveStraightInches(4, 0.8);
->>>>>>> 368477ee3a79073442fd289ed68416e6cfd32d48
     }
 }
 

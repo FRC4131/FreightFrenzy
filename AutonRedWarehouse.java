@@ -24,13 +24,15 @@ public class AutonRedWarehouse extends LinearOpMode {
             waitForStart();
 
             int barCodeTier = myRobot.ScanBarCode();
+            telemetry.addData("tier ", barCodeTier);
+            telemetry.update();
 
             double movePower = 0.4;
             myRobot.moveStraightInches(2, movePower);
             myRobot.moveSidewaysInches(18, movePower);
             myRobot.moveStraightInches(16, movePower);
             myRobot.moveArmPosition(barCodeTier);
-            myRobot.turnArmSpinnerTimed(2,1, 0.36);
+            myRobot.turnArmSpinnerTimed(2,1, 0.5);
             myRobot.moveStraightInches(-5, movePower);
             myRobot.turnAngleDegrees(-90, movePower);
             myRobot.moveStraightInches(60, 0.8);
