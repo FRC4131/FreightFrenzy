@@ -158,13 +158,24 @@ public class FieldCentricMecanumRed extends OpMode {
         if(gamepad2.left_stick_button){ //push really hard on the left stick
             starAngle(400);
         }
-        if(Math.abs(gamepad2.left_stick_y) > 0.05){
+        if(Math.abs(gamepad2.right_stick_y) > 0.05){
             arm2.setPower(-0.7 * gamepad2.left_stick_y);
-        } else {
-            arm2.setPower(0);
         }
 
-
+        if(gamepad2.left_trigger == 1.0){
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setTargetPosition(135);
+            arm2.setPower(0.5);
+        }
+        if(gamepad2.right_stick_button){
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setTargetPosition(0);
+            arm2.setPower(0.5);
+        }
+        if(Math.abs(gamepad2.left_stick_y) > 0.05){
+            arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            arm2.setPower(-0.7 * gamepad2.left_stick_y);
+        }
         if(gamepad2.right_trigger == 1.0){
             clamp.setPosition(0.35);
 
