@@ -170,4 +170,9 @@ public class SoftwareBot implements Robot{
         this.telemetry.update();
         return this.visionSystem.scanBarCode();
     }
+
+    @Override
+    public void stopCameraStream() {
+
+    }
 }

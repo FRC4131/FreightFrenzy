@@ -24,7 +24,7 @@ public class AutonBlueTurnTable extends LinearOpMode {
             waitForStart();
 
             int barCodeTier = myRobot.ScanBarCode();
-
+            myRobot.stopCameraStream();
             double movePower = 0.4;
 
 

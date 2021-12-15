@@ -20,4 +20,5 @@ public interface Robot
 
     //Vision system behaviors
     int ScanBarCode();
+    void stopCameraStream();
 }

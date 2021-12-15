@@ -72,4 +72,9 @@ public class BareBonesBot implements Robot{
         return 0;
     }
 
+    @Override
+    public void stopCameraStream() {
+
+    }
+
 }
