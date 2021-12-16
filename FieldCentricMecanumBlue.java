@@ -17,9 +17,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name="Field Centric Mecanum")
+@TeleOp(name="Field Centric Mecanum Blue")
 
-public class FieldCentricMecanum extends OpMode {
+public class FieldCentricMecanumBlue extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor backLeft = null;
@@ -133,36 +133,53 @@ public class FieldCentricMecanum extends OpMode {
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double c = angles.firstAngle - startAngle;
         double d = Math.toRadians(-c);
+        double driveSpeed;
+        if(gamepad1.right_trigger == 1.0){
+            driveSpeed = 1.0;
+        } else {
+            driveSpeed = 0.45;
+        }
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);
         double sideways = x * Math.cos(d) + y * Math.sin(d);
-        frontLeftPower =  Range.clip(forward - sideways - rotation, -0.7, 0.7 );
-        frontRightPower = Range.clip(forward + sideways + rotation, -0.7, 0.7);
-        backLeftPower =   Range.clip(forward + sideways - rotation, -0.7, 0.7);
-        backRightPower =  Range.clip(forward - sideways + rotation, -0.7, 0.7);
+        frontLeftPower =  Range.clip(forward - sideways - rotation, -driveSpeed, driveSpeed);
+        frontRightPower = Range.clip(forward + sideways + rotation, -driveSpeed, driveSpeed);
+        backLeftPower =   Range.clip(forward + sideways - rotation, -driveSpeed, driveSpeed);
+        backRightPower =  Range.clip(forward - sideways + rotation, -driveSpeed, driveSpeed);
 
-        if (gamepad2.left_trigger == 1.0){
-            spinner.setDirection(DcMotor.Direction.REVERSE);
-        }
-        if (gamepad2.left_bumper){
-            spinner.setDirection(DcMotor.Direction.FORWARD);
-        }
+
         //Activates star motor on the arm if the x button is pressed down on gamepad 2
         if(gamepad2.x) {
             starMotor.setPower(1.0);
         } else if (gamepad2.y) {
-            starMotor.setPower(-0.60);
+            starMotor.setPower(-0.50);
         } else {
             starMotor.setPower(0);
         }
         if(gamepad2.left_stick_button){ //push really hard on the left stick
-            starAngle(240);
+            starAngle(400);
         }
-        if(Math.abs(gamepad2.left_stick_y) > 0.05){
-            arm2.setPower(-0.7 * gamepad2.left_stick_y);
-        } else {
-            arm2.setPower(0);
+        boolean manualCapping = false;
+        if(gamepad2.left_trigger == 1.0){
+            manualCapping = false;
+            arm2.setTargetPosition(135);
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(0.5);
         }
+        if(gamepad2.left_stick_button){
+            manualCapping = false;
+            arm2.setTargetPosition(0);
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(-0.5);
+        }
+        if(gamepad2.right_stick_button){
+            manualCapping = true;
+        }
+        if(manualCapping){
+            arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            arm2.setPower(-0.7 * gamepad2.right_stick_y);
+        }
+
 
         if(gamepad2.right_trigger == 1.0){
             clamp.setPosition(0.35);
@@ -198,10 +215,10 @@ public class FieldCentricMecanum extends OpMode {
             spinner.setPower(0);
         }
         if(gamepad1.dpad_left){
-            timedRotate(1.35, -1);
+            timedRotate(1.35/2, -1);
         }
         if (gamepad1.dpad_right){
-            timedRotate(1.35, 1);
+            timedRotate(1.35/2, 1);
         }
         /*
         if(gamepad1.dpad_down){
