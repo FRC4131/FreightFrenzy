@@ -137,7 +137,7 @@ public class FieldCentricMecanumRed extends OpMode {
         if(gamepad1.right_trigger == 1.0){
             driveSpeed = 1.0;
         } else {
-            driveSpeed = 0.45;
+            driveSpeed = 0.9; //doubled from 0.45 (using 20:1 gear boxes) for new 40:1 gear boxes
         }
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);

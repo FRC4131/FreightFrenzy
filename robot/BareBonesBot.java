@@ -57,9 +57,24 @@ public class BareBonesBot implements Robot{
     }
 
     @Override
+    public void turnArmSpinner(int direction, double power) {
+        telemetry.addData("Command: ", "TurnArmSpinner");
+        telemetry.addData("Power: ", power);
+        telemetry.update();
+    }
+
+    @Override
     public void turnSpinnerTimed(double timeSeconds, double power, int direction){
-        telemetry.addData("Command: ","TimedTurnSpinner");
+        telemetry.addData("Command: ","TurnSpinnerTimed");
         telemetry.addData("Time: ", timeSeconds);
+        telemetry.addData("Power: ", power);
+        telemetry.addData("Direction: ", direction);
+        telemetry.update();
+    }
+
+    @Override
+    public void turnSpinner(double power, int direction) {
+        telemetry.addData("Command: ","TurnSpinner");
         telemetry.addData("Power: ", power);
         telemetry.addData("Direction: ", direction);
         telemetry.update();

@@ -11,7 +11,6 @@ public class SpinnerArm implements Arm {
         this.armMotor = inputArmMotor;
         this.starMotor = inputStarMotor;
         //this.armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 
     @Override
@@ -32,12 +31,17 @@ public class SpinnerArm implements Arm {
     }
 
     @Override
-    public void cargoSpin(int direction, double time, double power) {
+    public void cargoSpinTimed(int direction, double time, double power) {
         ElapsedTime starTime = new ElapsedTime();
         starTime.reset();
         while (starTime.seconds() <= time) {
             starMotor.setPower(direction * power);
         }
         starMotor.setPower(0);
+    }
+
+    @Override
+    public void cargoSpin(int direction, double power) {
+        starMotor.setPower(direction * power);
     }
 }

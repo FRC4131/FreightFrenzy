@@ -14,9 +14,11 @@ public interface Robot
     //Spinner-Arm specific behaviors
     void moveArmPosition(int position);
     void turnArmSpinnerTimed(double timeSeconds, int direction, double power);
+    void turnArmSpinner(int direction, double power);
 
     //Turntable spinner behaviors
     void turnSpinnerTimed(double timeSeconds, double power, int direction);
+    void turnSpinner(double power, int direction);
 
     //Vision system behaviors
     int ScanBarCode();

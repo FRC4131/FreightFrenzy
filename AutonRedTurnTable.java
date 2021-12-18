@@ -25,31 +25,25 @@ public class AutonRedTurnTable extends LinearOpMode {
 
             int barCodeTier = myRobot.ScanBarCode();
 
-            double movePower = 0.4;
+            double movePower = 0.8;
             myRobot.moveStraightInches(4, movePower);
             myRobot.turnAngleDegrees(180, movePower);
             myRobot.moveSidewaysInches(-29, movePower);
-            myRobot.turnSpinnerTimed(3, 0.8, 1);
+            myRobot.turnSpinner(0.8, 1);
+            sleep(3000);
+            myRobot.turnSpinner(0, 1);
             myRobot.moveStraightInches(-50, movePower);
             myRobot.moveArmPosition(barCodeTier);
             myRobot.moveSidewaysInches(50, movePower);
-            myRobot.turnArmSpinnerTimed(2,1, 0.6);
+            myRobot.turnArmSpinner(1, 0.6);
+            sleep(2000);
+            myRobot.turnArmSpinner(1, 0.0);
             myRobot.moveStraightInches(-2, movePower);
             myRobot.moveSidewaysInches(24, movePower);
             myRobot.moveStraightInches(31, movePower);
             myRobot.turnAngleDegrees(90, movePower);
             myRobot.moveStraightInches(55, 1.0);
             myRobot.turnAngleDegrees(90, movePower);
-            //robot lined up on far edge away from turn table
-        //    while(myCommandParser.update()) {}
-
-//        while (opModeIsActive()) {
-            //sleep(1000);
-//            }
-
-       // } catch (IOException e) {
-         //  e.printStackTrace();
-       // }
     }
 }
 

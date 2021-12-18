@@ -22,46 +22,20 @@ public class AutonBlueWarehouse extends LinearOpMode {
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
 
             waitForStart();
+            double movePower = 0.8;
             int barCodeTier = myRobot.ScanBarCode();
-            myRobot.moveStraightInches(2, 0.4);
-            myRobot.moveSidewaysInches(-18, 0.4);
+            myRobot.moveStraightInches(2, movePower);
+            myRobot.moveSidewaysInches(-18, movePower);
             myRobot.moveArmPosition(barCodeTier);
-            myRobot.moveStraightInches(15, 0.4);
-            myRobot.turnArmSpinnerTimed(2, 1, 0.5);
-            myRobot.moveStraightInches(-5, 0.4);
-            myRobot.turnAngleDegrees(90, 0.4);
-            myRobot.moveStraightInches(54, 0.8);
-            myRobot.turnAngleDegrees(-90, 0.4);
-            myRobot.moveStraightInches(6, 0.4);
-//            while(myCommandParser.update()) {}
-
-//   SCANBARCODE
-//STRAIGHT 2 0.4
-//SIDEWAYS -18 0.4
-//STRAIGHT 15 0.4
-//MOVEARM
-//MOVEARMSPINNER 2 1 0.3
-//TURNANGLE 90 0.4
-//STRAIGHT 54 0.8
-//TURNANGLE -90 0.4
-//STRAIGHT 6 0.4
-
-
-
-
-
-
-
-
-
-//        while (opModeIsActive()) {
-            //sleep(1000);
-//            }
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
+            myRobot.moveStraightInches(15, movePower);
+            myRobot.turnArmSpinner(1, 0.5);
+            sleep(2000);
+            myRobot.turnArmSpinner(1, 0.0);
+            myRobot.moveStraightInches(-5, movePower);
+            myRobot.turnAngleDegrees(90, movePower);
+            myRobot.moveStraightInches(54, 1.0);
+            myRobot.turnAngleDegrees(-90, movePower);
+            myRobot.moveStraightInches(6, movePower);
     }
 }
 

@@ -22,4 +22,10 @@ public class SingleMotorTableSpinner implements TableSpinner{
         }
         this.tableSpinnerMotor.setPower(0);
     }
+
+    @Override
+    public void turnSpinner(double power, int direction) {
+        double spinnerPower = power * direction;
+        this.tableSpinnerMotor.setPower(spinnerPower);
+    }
 }

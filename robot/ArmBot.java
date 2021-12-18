@@ -9,10 +9,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystem.arm.Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SpinnerArm;
+import org.firstinspires.ftc.teamcode.subsystem.drivetrain.BareBonesDriveTrain;
 import org.firstinspires.ftc.teamcode.subsystem.drivetrain.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystem.drivetrain.MecanumDriveTrain;
 import org.firstinspires.ftc.teamcode.subsystem.positiontracker.IMUPositionTracker;
 import org.firstinspires.ftc.teamcode.subsystem.positiontracker.PositionTracker;
+import org.firstinspires.ftc.teamcode.subsystem.tablespinner.BareBonesTableSpinner;
 import org.firstinspires.ftc.teamcode.subsystem.tablespinner.SingleMotorTableSpinner;
 import org.firstinspires.ftc.teamcode.subsystem.tablespinner.TableSpinner;
 import org.firstinspires.ftc.teamcode.subsystem.visionsystem.BareBonesVisionSystem;
@@ -43,7 +45,7 @@ public class ArmBot implements Robot{
     DcMotor rightFrontMotor = null;
     DcMotor leftBackMotor = null;
     DcMotor rightBackMotor = null;
-    static double gearRatio = 20;  //i.e. a gearbox with 20:1 gear ratio
+    static double gearRatio = 40;  //i.e. a gearbox with 40:1 gear ratio
     static double ticksPerMotorRotation = 24;  //i.e. (6 encoder cycles)/(motor revolution) * (4 encoder ticks or events)/(encoder cycle) = (24 ticks)/(motor revolution) -- see Torquenado encoder Specs
     static double driveBaseLengthInches = 12.25;
     static double driveBaseWidthInches = 10.5;
@@ -173,17 +175,34 @@ public class ArmBot implements Robot{
         this.telemetry.addData("Time: ", timeSeconds);
         this.telemetry.addData("Power: ", power);
         this.telemetry.update();
-        this.arm.cargoSpin(direction, timeSeconds, power);
+        this.arm.cargoSpinTimed(direction, timeSeconds, power);
+    }
+
+    @Override
+    public void turnArmSpinner(int direction, double power) {
+        this.telemetry.addData("Command: ","TimedTurnArmSpinner");
+        this.telemetry.addData("Power: ", power);
+        this.telemetry.update();
+        this.arm.cargoSpin(direction, power);
     }
 
     @Override
     public void turnSpinnerTimed(double timeSeconds, double power, int direction){
-        this.telemetry.addData("Command: ","TimedTurnSpinner");
+        this.telemetry.addData("Command: ","TurnSpinnerTimed");
         this.telemetry.addData("Time: ", timeSeconds);
         this.telemetry.addData("Power: ", power);
         this.telemetry.addData("Direction: ", direction);
         this.telemetry.update();
         spinner.turnSpinnerTimed(timeSeconds, power, direction);
+    }
+
+    @Override
+    public void turnSpinner(double power, int direction) {
+        this.telemetry.addData("Command: ","TurnSpinner");
+        this.telemetry.addData("Power: ", power);
+        this.telemetry.addData("Direction: ", direction);
+        this.telemetry.update();
+        spinner.turnSpinner(power, direction);
     }
 
     @Override

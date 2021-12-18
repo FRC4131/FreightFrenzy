@@ -27,15 +27,17 @@ public class AutonRedWarehouse extends LinearOpMode {
             telemetry.addData("tier ", barCodeTier);
             telemetry.update();
 
-            double movePower = 0.4;
+            double movePower = 0.8;
             myRobot.moveStraightInches(2, movePower);
             myRobot.moveSidewaysInches(18, movePower);
             myRobot.moveStraightInches(16, movePower);
             myRobot.moveArmPosition(barCodeTier);
-            myRobot.turnArmSpinnerTimed(2,1, 0.5);
+            myRobot.turnArmSpinner(1, 0.5);
+            sleep(2000);
+            myRobot.turnArmSpinner(1, 0.0);
             myRobot.moveStraightInches(-5, movePower);
             myRobot.turnAngleDegrees(-90, movePower);
-            myRobot.moveStraightInches(60, 0.8);
+            myRobot.moveStraightInches(60, 1.0);
             myRobot.turnAngleDegrees(90, movePower);
     }
 }

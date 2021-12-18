@@ -155,13 +155,29 @@ public class SoftwareBot implements Robot{
     }
 
     @Override
+    public void turnArmSpinner(int direction, double power) {
+        this.telemetry.addData("Command: ","TurnArmSpinner");
+        this.telemetry.addData("Power: ", power);
+        this.telemetry.update();
+    }
+
+    @Override
     public void turnSpinnerTimed(double timeSeconds, double power, int direction){
-        this.telemetry.addData("Command: ","TimedTurnSpinner");
+        this.telemetry.addData("Command: ","TurnSpinnerTimed");
         this.telemetry.addData("Time: ", timeSeconds);
         this.telemetry.addData("Power: ", power);
         this.telemetry.addData("Direction: ", direction);
         this.telemetry.update();
         spinner.turnSpinnerTimed(timeSeconds, power, direction);
+    }
+
+    @Override
+    public void turnSpinner(double power, int direction) {
+        this.telemetry.addData("Command: ","TurnSpinner");
+        this.telemetry.addData("Power: ", power);
+        this.telemetry.addData("Direction: ", direction);
+        this.telemetry.update();
+        spinner.turnSpinner(power, direction);
     }
 
     @Override
