@@ -159,27 +159,33 @@ public class FieldCentricMecanumBlue extends OpMode {
         if(gamepad2.left_stick_button){ //push really hard on the left stick
             starAngle(400);
         }
+
+        //********************************
         boolean manualCapping = false;
+        //goes to position
         if(gamepad2.left_trigger == 1.0){
             manualCapping = false;
             arm2.setTargetPosition(135);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(0.5);
         }
+        //goes back to starting position
         if(gamepad2.left_stick_button){
             manualCapping = false;
             arm2.setTargetPosition(0);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(-0.5);
         }
+        //turns on manual capping mode
         if(gamepad2.right_stick_button){
             manualCapping = true;
         }
+        //actually does the action of capping
         if(manualCapping){
             arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             arm2.setPower(-0.7 * gamepad2.right_stick_y);
         }
-
+        //************************************
 
         if(gamepad2.right_trigger == 1.0){
             clamp.setPosition(0.35);
