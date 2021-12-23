@@ -31,6 +31,7 @@ public class FieldCentricMecanumBlue extends OpMode {
     private DcMotor arm2 = null;
     private DcMotor spinner = null;
     private Servo clamp = null;
+    private Servo linear = null;
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
@@ -64,19 +65,21 @@ public class FieldCentricMecanumBlue extends OpMode {
         arm2 = hardwareMap.get(DcMotor.class, "ARM2");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
         clamp = hardwareMap.get(Servo.class, "CLAMP");
+        linear = hardwareMap.get(Servo.class, "LINEAR");
         imu.initialize(parameters);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
         spinner.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.REVERSE);
         clamp.setDirection(Servo.Direction.REVERSE);
+        linear.setDirection(Servo.Direction.REVERSE);
 
-
+        arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //Setting the DcMotors to run using the encoders engages the DcMotor's built-in
         // PID controller when setting motor angular speeds
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -137,7 +140,7 @@ public class FieldCentricMecanumBlue extends OpMode {
         if(gamepad1.right_trigger == 1.0){
             driveSpeed = 1.0;
         } else {
-            driveSpeed = 0.9; //doubled from 0.45 (using 20:1 gear boxes) for new 40:1 gear boxes
+            driveSpeed = 1.0; //doubled from 0.45 (using 20:1 gear boxes) for new 40:1 gear boxes
         }
 
         double forward = -x * Math.sin(d) + y * Math.cos(d);
@@ -161,30 +164,27 @@ public class FieldCentricMecanumBlue extends OpMode {
         }
 
         //********************************
-        boolean manualCapping = false;
+//        boolean manualCapping = false;
         //goes to position
         if(gamepad2.left_trigger == 1.0){
-            manualCapping = false;
             arm2.setTargetPosition(135);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(0.5);
-        }
-        //goes back to starting position
-        if(gamepad2.left_stick_button){
-            manualCapping = false;
+            arm2.setPower(0.8);
+        } else if(gamepad2.left_bumper){
             arm2.setTargetPosition(0);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(-0.5);
+            arm2.setPower(-0.8);
+        } else{
+            arm2.setPower(0);
         }
-        //turns on manual capping mode
-        if(gamepad2.right_stick_button){
-            manualCapping = true;
-        }
+//        if(gamepad2.right_stick_button){
+////            manualCapping = true;
+//        }
         //actually does the action of capping
-        if(manualCapping){
-            arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm2.setPower(-0.7 * gamepad2.right_stick_y);
-        }
+//        if(manualCapping){
+//            arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            arm2.setPower(-0.7 * gamepad2.right_stick_y);
+//        }
         //************************************
 
         if(gamepad2.right_trigger == 1.0){
@@ -193,6 +193,13 @@ public class FieldCentricMecanumBlue extends OpMode {
         }
         if(gamepad2.right_bumper){
             clamp.setPosition(0);
+        }
+        if(gamepad1.a){
+            linear.setPosition(0.85);
+
+        }
+        if(gamepad1.b){
+            linear.setPosition(0);
         }
         if(gamepad2.dpad_up) {
 
@@ -220,12 +227,12 @@ public class FieldCentricMecanumBlue extends OpMode {
         } else if(gamepad2.b) {
             spinner.setPower(0);
         }
-        if(gamepad1.dpad_left){
-            timedRotate(1.35/2, -1);
-        }
-        if (gamepad1.dpad_right){
-            timedRotate(1.35/2, 1);
-        }
+//        if(gamepad1.dpad_left){
+//            timedRotate(1.35/2, -1);
+//        }
+//        if (gamepad1.dpad_right){
+//            timedRotate(1.35/2, 1);
+//        }
         /*
         if(gamepad1.dpad_down){
             rotateToAngle(180, 1);
