@@ -31,6 +31,7 @@ public class FieldCentricMecanumRed extends OpMode {
     private DcMotor arm2 = null;
     private DcMotor spinner = null;
     private Servo clamp = null;
+    private Servo linear = null;
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
@@ -64,6 +65,7 @@ public class FieldCentricMecanumRed extends OpMode {
         arm2 = hardwareMap.get(DcMotor.class, "ARM2");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
         clamp = hardwareMap.get(Servo.class, "CLAMP");
+        linear = hardwareMap.get(Servo.class, "LINEAR");
         imu.initialize(parameters);
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -75,6 +77,9 @@ public class FieldCentricMecanumRed extends OpMode {
         spinner.setDirection(DcMotor.Direction.REVERSE);
         arm.setDirection(DcMotor.Direction.REVERSE);
         clamp.setDirection(Servo.Direction.REVERSE);
+        linear.setDirection(Servo.Direction.FORWARD);
+        arm2.setDirection(DcMotor.Direction.FORWARD);
+        arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         //Setting the DcMotors to run using the encoders engages the DcMotor's built-in
@@ -147,41 +152,50 @@ public class FieldCentricMecanumRed extends OpMode {
         backLeftPower =   Range.clip(forward + sideways - rotation, -driveSpeed, driveSpeed);
         backRightPower =  Range.clip(forward - sideways + rotation, -driveSpeed, driveSpeed);
 
-        //Activates star motor on the arm if the x button is pressed down on gamepad 2
+        //Activates star motor to intake on the arm if the x button is pressed down on gamepad 2
+        //linear actuator simultaneously slightly opens the cup to enable intake
+        //Activates star motor to output on the arm if the Y button is pressed on gamepad 2
+        //linear actuator simultaneously opens the cup wide to enable output
+        //when no button is pressed, cup is in slightly closed position
         if(gamepad2.x) {
             starMotor.setPower(1.0);
+            linear.setPosition(0.31);
         } else if (gamepad2.y) {
-            starMotor.setPower(-0.50);
+            starMotor.setPower(-0.40);
+            linear.setPosition(0.4);
         } else {
             starMotor.setPower(0);
+            linear.setPosition(0.27);
         }
         if(gamepad2.left_stick_button){ //push really hard on the left stick
             starAngle(400);
         }
-        if(Math.abs(gamepad2.right_stick_y) > 0.05){
-            arm2.setPower(-0.7 * gamepad2.left_stick_y);
-        }
 
-        if(gamepad2.left_trigger == 1.0){
+        //left bumper puts Arm2 in low position to grab
+        //holding left trigger puts Arm2 in capping position
+        //holding right bumper puts Arm back in initialization position
+        if(gamepad2.left_bumper){
+            arm2.setTargetPosition(500);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setTargetPosition(135);
-            arm2.setPower(0.5);
-        }
-        if(gamepad2.right_stick_button){
-            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(0.8);
+        } else if(gamepad2.right_bumper) {
             arm2.setTargetPosition(0);
-            arm2.setPower(0.5);
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(-0.8);
+        } else if (gamepad2.left_trigger == 1.0) {
+            arm2.setTargetPosition(285);
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(1.0);
+        } else{
+            arm2.setPower(0);
         }
-        if(Math.abs(gamepad2.left_stick_y) > 0.05){
-            arm2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm2.setPower(-0.7 * gamepad2.left_stick_y);
-        }
+
         if(gamepad2.right_trigger == 1.0){
-            clamp.setPosition(0.35);
+            clamp.setPosition(0);
 
         }
-        if(gamepad2.right_bumper){
-            clamp.setPosition(0);
+        else{
+            clamp.setPosition(.35);
         }
         if(gamepad2.dpad_up) {
 
@@ -200,22 +214,18 @@ public class FieldCentricMecanumRed extends OpMode {
         }
         if(gamepad2.dpad_left) {
 
-            starAngle(-20);
+            starAngle(0);
 
         }
 
         if(gamepad2.a) {
             spinner.setPower(-1);
-        } else if(gamepad2.b) {
+        } else {
             spinner.setPower(0);
         }
-        if(gamepad1.dpad_left){
-            timedRotate(1.35/2, -1);
-        }
-        if (gamepad1.dpad_right){
-            timedRotate(1.35/2, 1);
-        }
-        /*
+
+        //rotates robot in the direction the Dpad is pressed - maintains field centric
+
         if(gamepad1.dpad_down){
             rotateToAngle(180, 1);
         }
@@ -228,7 +238,7 @@ public class FieldCentricMecanumRed extends OpMode {
         if(gamepad1.dpad_right){
             rotateToAngle(270, 1);
         }
-        */
+
         // Send calculated power to wheels
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
