@@ -181,6 +181,11 @@ public class SoftwareBot implements Robot{
     }
 
     @Override
+    public void moveCollectorArm(int position, double power) {
+
+    }
+
+    @Override
     public int ScanBarCode(){
         this.telemetry.addData("Command: ", "ScanBarCode");
         this.telemetry.update();

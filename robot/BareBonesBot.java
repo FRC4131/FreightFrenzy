@@ -81,6 +81,11 @@ public class BareBonesBot implements Robot{
     }
 
     @Override
+    public void moveCollectorArm(int position, double power) {
+
+    }
+
+    @Override
     public int ScanBarCode(){
         telemetry.addData("Command: ", "ScanBarCode");
         telemetry.update();

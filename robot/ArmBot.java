@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystem.arm.Arm;
 import org.firstinspires.ftc.teamcode.subsystem.arm.SpinnerArm;
+import org.firstinspires.ftc.teamcode.subsystem.cappingArm.CappingArm;
+import org.firstinspires.ftc.teamcode.subsystem.cappingArm.MagneticCappingArm;
 import org.firstinspires.ftc.teamcode.subsystem.drivetrain.BareBonesDriveTrain;
 import org.firstinspires.ftc.teamcode.subsystem.drivetrain.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystem.drivetrain.MecanumDriveTrain;
@@ -34,6 +36,7 @@ public class ArmBot implements Robot{
     VisionSystem visionSystem;
     PositionTracker positionTracker;
     Arm arm;
+    CappingArm arm2;
 
     //Robot messaging/debugging and hardware mapping components
     Telemetry telemetry;
@@ -64,6 +67,8 @@ public class ArmBot implements Robot{
     DcMotor armMotor;
     DcMotor starMotor;
 
+    DcMotor arm2Motor;
+
     public ArmBot(Telemetry inputTelemetry, HardwareMap inputHardwareMap){
         this.telemetry = inputTelemetry;
         this.hardwareMap = inputHardwareMap;
@@ -72,6 +77,15 @@ public class ArmBot implements Robot{
         this.spinner = initializeTableSpinner();
         this.visionSystem = initializeVisionSystem();
         this.arm = initializeArm();
+        this.arm2 = initializeArm2();
+    }
+
+    private CappingArm initializeArm2(){
+        this.arm2Motor = hardwareMap.get(DcMotor.class, "ARM2");
+        this.arm2Motor.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        return new MagneticCappingArm(this.arm2Motor);
     }
 
     private DriveTrain initializeDriveTrain(){
@@ -203,6 +217,11 @@ public class ArmBot implements Robot{
         this.telemetry.addData("Direction: ", direction);
         this.telemetry.update();
         spinner.turnSpinner(power, direction);
+    }
+
+    @Override
+    public void moveCollectorArm(int position, double power) {
+        this.arm2.moveColectorArm(position,power);
     }
 
     @Override
