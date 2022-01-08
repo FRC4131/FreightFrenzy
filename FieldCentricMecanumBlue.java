@@ -161,13 +161,13 @@ public class FieldCentricMecanumBlue extends OpMode {
         //when no button is pressed, cup is in slightly closed position
         if(gamepad2.x) {
             starMotor.setPower(1.0);
-            linear.setPosition(0.31);
+            linear.setPosition(0.26);
         } else if (gamepad2.y) {
             starMotor.setPower(-0.40);
             linear.setPosition(0.4);
         } else {
             starMotor.setPower(0);
-            linear.setPosition(0.27);
+            linear.setPosition(0.22);
         }
         if(gamepad2.left_stick_button){ //push really hard on the left stick
             starAngle(400);
