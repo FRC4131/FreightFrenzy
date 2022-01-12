@@ -26,7 +26,7 @@ public class AutonBlueTurnTable extends LinearOpMode {
 
             int barCodeTier = myRobot.ScanBarCode();
             myRobot.stopCameraStream();
-            double movePower = 0.75;
+            double movePower = 0.7;
             //myRobot.moveCollectorArm(1,0.4);
 //            sleep(10000);
             myRobot.moveStraightInches(4, movePower);
@@ -47,7 +47,13 @@ public class AutonBlueTurnTable extends LinearOpMode {
             myRobot.moveStraightInches(35, movePower);
             myRobot.turnAngleDegrees(-90, movePower);
             myRobot.moveStraightInches(53, 1.0);
-            myRobot.turnAngleDegrees(-90, movePower);
+            myRobot.turnAngleDegrees(90, movePower);
+            myRobot.turnArmSpinner(-1,0.6);
+            myRobot.moveStraightInches(9,movePower);
+            sleep(2000);
+            myRobot.turnArmSpinner(-1,0.0);
+            myRobot.moveStraightInches(-5,movePower);
+            myRobot.turnAngleDegrees(-180,movePower);
     }
 }
 

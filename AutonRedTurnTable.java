@@ -29,14 +29,14 @@ public class AutonRedTurnTable extends LinearOpMode {
 //            sleep(2000);
 //            myRobot.moveCollectorArm(0, 0.4);
 
-            double movePower = 0.7;
+            double movePower = 0.6;
             myRobot.moveStraightInches(5, movePower);
             myRobot.turnAngleDegrees(185, movePower);
             myRobot.moveSidewaysInches(-31, movePower);
             myRobot.turnSpinner(0.8, 1);
             sleep(3000);
             myRobot.turnSpinner(0, 1);
-            myRobot.moveStraightInches(-55, movePower);
+            myRobot.moveStraightInches(-54, movePower);
             myRobot.moveArmPosition(barCodeTier);
             myRobot.moveSidewaysInches(50, movePower);
             myRobot.turnArmSpinner(1, 0.6);
@@ -47,7 +47,14 @@ public class AutonRedTurnTable extends LinearOpMode {
             myRobot.moveStraightInches(31, movePower);
             myRobot.turnAngleDegrees(98, movePower);
             myRobot.moveStraightInches(55, 1.0);
-            myRobot.turnAngleDegrees(95, movePower);
+            myRobot.moveArmPosition(-1);
+            myRobot.turnAngleDegrees(-95, movePower);
+            myRobot.turnArmSpinner(-1,0.6);
+            myRobot.moveStraightInches(9,movePower);
+            sleep(2000);
+            myRobot.turnArmSpinner(-1,0.0);
+            myRobot.moveStraightInches(-5,movePower);
+            myRobot.turnAngleDegrees(180,movePower);
     }
 }
 

@@ -180,7 +180,11 @@ public class ArmBot implements Robot{
         this.telemetry.addData("Command: ","MoveArmPosition");
         this.telemetry.addData("Position: ", position);
         this.telemetry.update();
-        this.arm.moveToTier(position, 1.0);
+        if(position < 0)
+            this.arm.moveToTier(0, 0.0);
+        else
+            this.arm.moveToTier(position, 1.0);
+
     }
 
     @Override
