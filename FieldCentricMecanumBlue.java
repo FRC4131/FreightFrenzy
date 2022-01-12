@@ -177,7 +177,7 @@ public class FieldCentricMecanumBlue extends OpMode {
         //holding left trigger puts Arm2 in capping position
         //holding right bumper puts Arm back in initialization position
         if(gamepad2.left_bumper){
-            arm2.setTargetPosition(500);
+            arm2.setTargetPosition(460);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(0.8);
         } else if(gamepad2.right_bumper) {
@@ -185,7 +185,7 @@ public class FieldCentricMecanumBlue extends OpMode {
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(-0.8);
         } else if (gamepad2.left_trigger == 1.0) {
-            arm2.setTargetPosition(285);
+            arm2.setTargetPosition(260);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(1.0);
         } else{
