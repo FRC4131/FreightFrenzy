@@ -26,33 +26,34 @@ public class AutonBlueTurnTable extends LinearOpMode {
 
             int barCodeTier = myRobot.ScanBarCode();
             myRobot.stopCameraStream();
-            double movePower = 0.7;
+            double movePower = 0.6;
             //myRobot.moveCollectorArm(1,0.4);
 //            sleep(10000);
             myRobot.moveStraightInches(4, movePower);
-            myRobot.turnAngleDegrees(-90, movePower);
-            myRobot.moveStraightInches(13.5, 0.6);
+            myRobot.turnAngleDegrees(-93, movePower);
+            myRobot.moveStraightInches(14.5, 0.6);
 
             myRobot.turnSpinner(0.8, -1);
             sleep(3000);
             myRobot.turnSpinner(0, -1);
-            myRobot.moveSidewaysInches(60, movePower);
+            myRobot.moveSidewaysInches(58, movePower);
             myRobot.moveArmPosition(barCodeTier);
             myRobot.turnAngleDegrees(-100, movePower);
-            myRobot.moveSidewaysInches(-45, movePower);
+            myRobot.moveSidewaysInches(-47, movePower);
             myRobot.turnArmSpinner(1, 0.36);
             sleep(2000);
             myRobot.turnArmSpinner(1, 0.0);
-            myRobot.moveSidewaysInches(-23, movePower);
-            myRobot.moveStraightInches(35, movePower);
+            myRobot.moveSidewaysInches(-21, movePower);
+            myRobot.moveStraightInches(32, movePower);
             myRobot.turnAngleDegrees(-90, movePower);
-            myRobot.moveStraightInches(53, 1.0);
+            myRobot.moveStraightInches(60, 1.0);
+            myRobot.moveArmPosition(-1);
             myRobot.turnAngleDegrees(90, movePower);
             myRobot.turnArmSpinner(-1,0.6);
             myRobot.moveStraightInches(9,movePower);
             sleep(2000);
             myRobot.turnArmSpinner(-1,0.0);
-            myRobot.moveStraightInches(-5,movePower);
+            myRobot.moveStraightInches(-9,movePower);
             myRobot.turnAngleDegrees(-180,movePower);
     }
 }
