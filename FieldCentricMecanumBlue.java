@@ -76,7 +76,7 @@ public class FieldCentricMecanumBlue extends OpMode {
         backRight.setDirection(DcMotor.Direction.FORWARD);
         spinner.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.REVERSE);
-        clamp.setDirection(Servo.Direction.REVERSE);
+        clamp.setDirection(Servo.Direction.FORWARD);
         linear.setDirection(Servo.Direction.FORWARD);
         arm2.setDirection(DcMotorSimple.Direction.FORWARD);
         arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -177,13 +177,13 @@ public class FieldCentricMecanumBlue extends OpMode {
         //holding left trigger puts Arm2 in capping position
         //holding right bumper puts Arm back in initialization position
         if(gamepad2.left_bumper){
-            arm2.setTargetPosition(460);
+            arm2.setTargetPosition(450);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(0.8);
         } else if(gamepad2.right_bumper) {
             arm2.setTargetPosition(0);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(-0.8);
+            arm2.setPower(-1);
         } else if (gamepad2.left_trigger == 1.0) {
             arm2.setTargetPosition(260);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -194,10 +194,10 @@ public class FieldCentricMecanumBlue extends OpMode {
 
         //holding right trigger opens the clamp, auto-closes when trigger isn't pressed
         if(gamepad2.right_trigger == 1.0){
-            clamp.setPosition(0.0);
+            clamp.setPosition(0.7);
         }
         else{
-            clamp.setPosition(0.35);
+            clamp.setPosition(0.3);
         }
 
         if(gamepad2.dpad_up) {
