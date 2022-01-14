@@ -162,6 +162,7 @@ public class FieldCentricMecanumBlue extends OpMode {
         if(gamepad2.x) {
             starMotor.setPower(1.0);
             linear.setPosition(0.26);
+            linear.setPosition(0.25);
         } else if (gamepad2.y) {
             starMotor.setPower(-0.40);
             linear.setPosition(0.4);
