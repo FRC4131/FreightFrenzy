@@ -161,7 +161,6 @@ public class FieldCentricMecanumBlue extends OpMode {
         //when no button is pressed, cup is in slightly closed position
         if(gamepad2.x) {
             starMotor.setPower(1.0);
-            linear.setPosition(0.26);
             linear.setPosition(0.25);
         } else if (gamepad2.y) {
             starMotor.setPower(-0.40);
