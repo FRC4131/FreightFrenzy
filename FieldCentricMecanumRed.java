@@ -195,7 +195,7 @@ public class FieldCentricMecanumRed extends OpMode {
 
         }
         else{
-            clamp.setPosition(.35);
+            clamp.setPosition(.3);
         }
         if(gamepad2.dpad_up) {
 
