@@ -34,8 +34,8 @@ public class AutonBlueWarehouse extends LinearOpMode {
             myRobot.moveStraightInches(-5, movePower);
             myRobot.turnAngleDegrees(90, movePower);
             myRobot.moveStraightInches(54, 1.0);
-            myRobot.turnAngleDegrees(-90, movePower);
-            myRobot.moveStraightInches(6, movePower);
+            //myRobot.turnAngleDegrees(-90, movePower);
+            //myRobot.moveStraightInches(6, movePower);
     }
 }
 

@@ -31,6 +31,7 @@ public class FieldCentricMecanumRed extends OpMode {
     private DcMotor arm2 = null;
     private DcMotor spinner = null;
     private Servo clamp = null;
+    private Servo cappingHand = null;
     private Servo linear = null;
     BNO055IMU imu;
     Orientation angles;
@@ -64,6 +65,7 @@ public class FieldCentricMecanumRed extends OpMode {
         arm = hardwareMap.get(DcMotor.class, "ARM");
         arm2 = hardwareMap.get(DcMotor.class, "ARM2");
         spinner = hardwareMap.get(DcMotor.class, "spinner");
+        cappingHand = hardwareMap.get(Servo.class, "CAPPINGHAND");
         clamp = hardwareMap.get(Servo.class, "CLAMP");
         linear = hardwareMap.get(Servo.class, "LINEAR");
         imu.initialize(parameters);
@@ -78,6 +80,7 @@ public class FieldCentricMecanumRed extends OpMode {
         arm.setDirection(DcMotor.Direction.REVERSE);
         clamp.setDirection(Servo.Direction.FORWARD);
         linear.setDirection(Servo.Direction.FORWARD);
+        cappingHand.setDirection(Servo.Direction.FORWARD);
         arm2.setDirection(DcMotor.Direction.FORWARD);
         arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -175,17 +178,20 @@ public class FieldCentricMecanumRed extends OpMode {
         //holding left trigger puts Arm2 in capping position
         //holding right bumper puts Arm back in initialization position
         if(gamepad2.left_bumper){
-            arm2.setTargetPosition(480);
+            arm2.setTargetPosition(545);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(0.8);
+            cappingHand.setPosition(0.02);
         } else if(gamepad2.right_bumper) {
             arm2.setTargetPosition(0);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(-1);
+            cappingHand.setPosition(0);
         } else if (gamepad2.left_trigger == 1.0) {
-            arm2.setTargetPosition(275);
+            arm2.setTargetPosition(335);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(1.0);
+            cappingHand.setPosition(0.52);
         } else{
             arm2.setPower(0);
         }
