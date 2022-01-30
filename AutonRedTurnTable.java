@@ -55,6 +55,7 @@ public class AutonRedTurnTable extends LinearOpMode {
             //myRobot.turnArmSpinner(-1,0.0);
             //myRobot.moveStraightInches(-5,movePower);
             //myRobot.turnAngleDegrees(185,movePower);*/
+            myRobot.saveHeading();
     }
 }
 

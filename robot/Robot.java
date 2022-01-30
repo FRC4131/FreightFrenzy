@@ -20,6 +20,8 @@ public interface Robot
     void turnSpinnerTimed(double timeSeconds, double power, int direction);
     void turnSpinner(double power, int direction);
 
+    void saveHeading();
+
     void moveCollectorArm(int position,double power);
 
     //Vision system behaviors

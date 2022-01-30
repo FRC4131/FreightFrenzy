@@ -81,6 +81,11 @@ public class BareBonesBot implements Robot{
     }
 
     @Override
+    public void saveHeading() {
+
+    }
+
+    @Override
     public void moveCollectorArm(int position, double power) {
 
     }

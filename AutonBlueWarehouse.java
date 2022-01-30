@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.commandparser.CommandParser;
 import org.firstinspires.ftc.teamcode.commandparser.FileCommandParser;
 import org.firstinspires.ftc.teamcode.robot.ArmBot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
+import org.firstinspires.ftc.teamcode.robot.SoftwareBot;
 
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ public class AutonBlueWarehouse extends LinearOpMode {
             Robot myRobot = new ArmBot(telemetry, hardwareMap);
 
             waitForStart();
+
             double movePower = 0.8;
             int barCodeTier = myRobot.ScanBarCode();
             myRobot.moveStraightInches(2, movePower);
@@ -36,6 +38,7 @@ public class AutonBlueWarehouse extends LinearOpMode {
             myRobot.moveStraightInches(54, 1.0);
             //myRobot.turnAngleDegrees(-90, movePower);
             //myRobot.moveStraightInches(6, movePower);
+            myRobot.saveHeading();
     }
 }
 

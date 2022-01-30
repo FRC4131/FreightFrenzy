@@ -25,6 +25,10 @@ import org.firstinspires.ftc.teamcode.subsystem.visionsystem.VisionSystem;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /* Software test robot implementation.
     Should have a basic Mecanum drivetrain, a spinner and webcam,
     and should satisfy our Robot interface */
@@ -221,6 +225,20 @@ public class ArmBot implements Robot{
         this.telemetry.addData("Direction: ", direction);
         this.telemetry.update();
         spinner.turnSpinner(power, direction);
+    }
+
+    @Override
+    public void saveHeading() {
+        double currentAngle = this.positionTracker.estimateHeading();
+        try {
+            FileWriter file = new FileWriter("/sdcard/tmp/SavedHeading.txt");
+            BufferedWriter writer = new BufferedWriter(file);
+            writer.write(Double.toString(currentAngle));
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

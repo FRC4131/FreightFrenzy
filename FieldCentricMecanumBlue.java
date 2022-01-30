@@ -17,6 +17,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.File;
+
 @TeleOp(name="Field Centric Mecanum Blue")
 
 public class FieldCentricMecanumBlue extends OpMode {
@@ -38,12 +44,31 @@ public class FieldCentricMecanumBlue extends OpMode {
     Acceleration gravity;
     double startAngle;
 
+    double savedAngle_offset = 0.0;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
+        FileReader file = null;
+        BufferedReader bufferedReader;
+        String angleString = "0.0";
+
+        try {
+            file = new FileReader("/sdcard/tmp/SavedHeading.txt");
+            bufferedReader = new BufferedReader(file);
+            angleString = bufferedReader.readLine();
+            bufferedReader.close();
+            File myfile = new File("/sdcard/tmp/SavedHeading.txt");
+            myfile.delete();
+
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+
+        savedAngle_offset = Double.parseDouble(angleString);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -139,8 +164,11 @@ public class FieldCentricMecanumBlue extends OpMode {
         double x = -gamepad1.left_stick_x;
         double rotation = -gamepad1.right_stick_x;
 
+        //telemetry.addData("SavedOffset: ", savedAngle_offset);
+        //telemetry.update();
+
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double c = angles.firstAngle - startAngle;
+        double c = angles.firstAngle - startAngle + savedAngle_offset;
         double d = Math.toRadians(-c);
         double driveSpeed;
         if(gamepad1.right_trigger == 1.0){
@@ -183,7 +211,7 @@ public class FieldCentricMecanumBlue extends OpMode {
             arm2.setTargetPosition(545);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(0.8);
-            cappingHand.setPosition(0.02);
+            cappingHand.setPosition(0.0);
         } else if(gamepad2.right_bumper) {
             arm2.setTargetPosition(0);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
