@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -42,6 +43,7 @@ public class ArmBot implements Robot{
     Arm arm;
     CappingArm arm2;
 
+
     //Robot messaging/debugging and hardware mapping components
     Telemetry telemetry;
     HardwareMap hardwareMap;
@@ -71,7 +73,9 @@ public class ArmBot implements Robot{
     DcMotor armMotor;
     DcMotor starMotor;
 
+    //Arm 2 components (for capping)
     DcMotor arm2Motor;
+    Servo cappingHand;
 
     public ArmBot(Telemetry inputTelemetry, HardwareMap inputHardwareMap){
         this.telemetry = inputTelemetry;
@@ -87,9 +91,10 @@ public class ArmBot implements Robot{
     private CappingArm initializeArm2(){
         this.arm2Motor = hardwareMap.get(DcMotor.class, "ARM2");
         this.arm2Motor.setDirection(DcMotor.Direction.FORWARD);
+        this.cappingHand = hardwareMap.get(Servo.class, "CAPPINGHAND");
         this.leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        return new MagneticCappingArm(this.arm2Motor);
+        return new MagneticCappingArm(this.arm2Motor, this.cappingHand);
     }
 
     private DriveTrain initializeDriveTrain(){
