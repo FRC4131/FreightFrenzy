@@ -222,7 +222,12 @@ public class FieldCentricMecanumBlue extends OpMode {
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm2.setPower(1.0);
             cappingHand.setPosition(0.52);
-        } else{
+        } else if (gamepad2.b){
+            arm2.setTargetPosition(350);
+            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm2.setPower(1.0);
+            cappingHand.setPosition(0.52);
+        }else{
             arm2.setPower(0);
         }
 
