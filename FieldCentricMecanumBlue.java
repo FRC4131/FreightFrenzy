@@ -45,6 +45,7 @@ public class FieldCentricMecanumBlue extends OpMode {
     double startAngle;
 
     double savedAngle_offset = 0.0;
+    double arm2ScalingFactor = 0.6;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -204,32 +205,47 @@ public class FieldCentricMecanumBlue extends OpMode {
             starAngle(400);
         }
 
+        arm2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm2.setPower(gamepad2.right_stick_y * arm2ScalingFactor);
+
+//        telemetry.addData("Capping position offset: ", offset);
+
+        if(arm2.getCurrentPosition() > 400) {
+            cappingHand.setPosition(0.0);
+        }
+        else if ((arm2.getCurrentPosition() > 275) & (arm2.getCurrentPosition() < 400)){
+            cappingHand.setPosition(0.52);
+        }
+        else{
+            cappingHand.setPosition(0.0);
+        }
+
         //left bumper puts Arm2 in low position to grab
         //holding left trigger puts Arm2 in capping position
         //holding right bumper puts Arm back in initialization position
-        if(gamepad2.left_bumper){
-            arm2.setTargetPosition(545);
-            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(0.8);
-            cappingHand.setPosition(0.0);
-        } else if(gamepad2.right_bumper) {
-            arm2.setTargetPosition(0);
-            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(-1);
-            cappingHand.setPosition(-1);
-        } else if (gamepad2.left_trigger == 1.0) {
-            arm2.setTargetPosition(335);
-            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(1.0);
-            cappingHand.setPosition(0.52);
-        } else if (gamepad2.b){
-            arm2.setTargetPosition(350);
-            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm2.setPower(1.0);
-            cappingHand.setPosition(0.52);
-        }else{
-            arm2.setPower(0);
-        }
+//        if(gamepad2.left_bumper){
+//            arm2.setTargetPosition(545);
+//            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            arm2.setPower(0.8);
+//            cappingHand.setPosition(0.0);
+//        } else if(gamepad2.right_bumper) {
+//            arm2.setTargetPosition(0);
+//            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            arm2.setPower(-1);
+//            cappingHand.setPosition(-1);
+//        } else if (gamepad2.left_trigger == 1.0) {
+//            arm2.setTargetPosition(335);
+//            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            arm2.setPower(1.0);
+//            cappingHand.setPosition(0.52);
+//        } else if (gamepad2.b){
+//            arm2.setTargetPosition(350);
+//            arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            arm2.setPower(1.0);
+//            cappingHand.setPosition(0.52);
+//        }else{
+//            arm2.setPower(0);
+//        }
 
         //holding right trigger opens the clamp, auto-closes when trigger isn't pressed
         if(gamepad2.right_trigger == 1.0){
